@@ -8,7 +8,7 @@ const PORT = 8080;
 // Middleware to parse JSON
 app.use(express.json());
 
-// Routes
+// Routes for OTP 
 app.use('/api', OtpRoutes);
 
 app.listen(PORT, () => {
