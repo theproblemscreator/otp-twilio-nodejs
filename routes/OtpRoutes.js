@@ -42,7 +42,7 @@ router.post('/send-otp', async (req, res) => {
 });
 
 // Verify OTP API
-router.post('/verify-otp', (req, res) => {
+router.post('/verify-otp', async(req, res) => {
     const { phoneNumber, otp } = req.body;
 
     const storedOtp = otpStore[phoneNumber];
@@ -56,6 +56,24 @@ router.post('/verify-otp', (req, res) => {
         res.status(200).json({ message: "OTP verified successfully" });
     } else {
         res.status(400).json({ message: "Invalid OTP" });
+    }
+});
+
+
+// Your routes here
+router.post('/make-call', async (req, res) => {
+    const {phoneNumber} = req.body;
+
+    try {
+        const call = await client.calls.create({
+            twiml: "Calling  is Initiated",
+            from: process.env.TWILIO_FROM_NUMBER,
+            to: phoneNumber
+        });
+
+        return res.status(201).json({details : call.accountSid});
+    } catch (error) {
+        return res.status(500).json({ message: "Error initiating call", error: error.message });
     }
 });
 
